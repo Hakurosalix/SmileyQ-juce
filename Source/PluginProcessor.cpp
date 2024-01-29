@@ -166,7 +166,8 @@ bool SmileyQAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* SmileyQAudioProcessor::createEditor()
 {
-    return new SmileyQAudioProcessorEditor (*this);
+    // return new SmileyQAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -186,7 +187,24 @@ void SmileyQAudioProcessor::setStateInformation (const void* data, int sizeInByt
 juce::AudioProcessorValueTreeState::ParameterLayout SmileyQAudioProcessor::createParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout parameterLayout;
+    float rangeStart, rangeEnd, intervalValue, skewFactor, defaultValue;
+    std::vector<juce::String> bandNames {"Band 20", "Band 32", "Band 64", "Band 125",
+                                        "Band 250", "Band 500", "Band 1k", "Band 2k",
+                                        "Band 4k", "Band 8k", "Band 16k", "Band 20kHz"};
+    rangeStart = -12.f;
+    rangeEnd = 12.f;
+    intervalValue = 0.5f;
+    skewFactor = 1.f;
+    defaultValue = 0.0f;
     
+    // All bands should probably be duplicates with different names... need to figure out
+    //  how to set their frequencies when get to DSP
+    for (juce::String bandName : bandNames) {
+        parameterLayout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(bandName, 1),
+                                                                        bandName,
+                                                                        juce::NormalisableRange<float>(rangeStart, rangeEnd, intervalValue, skewFactor),
+                                                                        defaultValue));
+    }
     
     return parameterLayout;
 }
