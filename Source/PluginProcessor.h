@@ -79,8 +79,8 @@ private:
     // using CutFilter = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter>;
     
     // Mono Chain represents our mono signal path
-    using MonoChain = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter>;
-    // Need 2 for stereo 
+    using MonoChain = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter>;
+    // Need 2 for stereo
     MonoChain leftChain, rightChain;
     
     // needed for indices of chain parameters when updating chain values in DSP
