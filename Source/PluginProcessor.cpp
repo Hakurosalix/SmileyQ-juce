@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-SmileyQAudioProcessor::SmileyQAudioProcessor()
+GraphicEQAudioProcessor::GraphicEQAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -24,17 +24,17 @@ SmileyQAudioProcessor::SmileyQAudioProcessor()
 {
 }
 
-SmileyQAudioProcessor::~SmileyQAudioProcessor()
+GraphicEQAudioProcessor::~GraphicEQAudioProcessor()
 {
 }
 
 //==============================================================================
-const juce::String SmileyQAudioProcessor::getName() const
+const juce::String GraphicEQAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool SmileyQAudioProcessor::acceptsMidi() const
+bool GraphicEQAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -43,7 +43,7 @@ bool SmileyQAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool SmileyQAudioProcessor::producesMidi() const
+bool GraphicEQAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -52,7 +52,7 @@ bool SmileyQAudioProcessor::producesMidi() const
    #endif
 }
 
-bool SmileyQAudioProcessor::isMidiEffect() const
+bool GraphicEQAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -61,37 +61,37 @@ bool SmileyQAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double SmileyQAudioProcessor::getTailLengthSeconds() const
+double GraphicEQAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int SmileyQAudioProcessor::getNumPrograms()
+int GraphicEQAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int SmileyQAudioProcessor::getCurrentProgram()
+int GraphicEQAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void SmileyQAudioProcessor::setCurrentProgram (int index)
+void GraphicEQAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const juce::String SmileyQAudioProcessor::getProgramName (int index)
+const juce::String GraphicEQAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void SmileyQAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void GraphicEQAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
 
 //==============================================================================
-void SmileyQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void GraphicEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
@@ -106,14 +106,14 @@ void SmileyQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     rightChain.prepare(spec);
 }
 
-void SmileyQAudioProcessor::releaseResources()
+void GraphicEQAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool SmileyQAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool GraphicEQAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -138,7 +138,7 @@ bool SmileyQAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 }
 #endif
 
-void SmileyQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void GraphicEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -168,32 +168,32 @@ void SmileyQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 }
 
 //==============================================================================
-bool SmileyQAudioProcessor::hasEditor() const
+bool GraphicEQAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* SmileyQAudioProcessor::createEditor()
+juce::AudioProcessorEditor* GraphicEQAudioProcessor::createEditor()
 {
     // return new SmileyQAudioProcessorEditor (*this);
     return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
-void SmileyQAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void GraphicEQAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void SmileyQAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void GraphicEQAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
 }
 
-juce::AudioProcessorValueTreeState::ParameterLayout SmileyQAudioProcessor::createParameterLayout()
+juce::AudioProcessorValueTreeState::ParameterLayout GraphicEQAudioProcessor::createParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout parameterLayout;
     float rangeStart, rangeEnd, intervalValue, skewFactor, defaultValue;
@@ -222,5 +222,5 @@ juce::AudioProcessorValueTreeState::ParameterLayout SmileyQAudioProcessor::creat
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new SmileyQAudioProcessor();
+    return new GraphicEQAudioProcessor();
 }

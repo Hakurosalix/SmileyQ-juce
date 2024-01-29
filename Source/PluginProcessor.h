@@ -13,12 +13,12 @@
 //==============================================================================
 /**
 */
-class SmileyQAudioProcessor  : public juce::AudioProcessor
+class GraphicEQAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    SmileyQAudioProcessor();
-    ~SmileyQAudioProcessor() override;
+    GraphicEQAudioProcessor();
+    ~GraphicEQAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -68,5 +68,5 @@ private:
     MonoChain leftChain, rightChain;
     
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SmileyQAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GraphicEQAudioProcessor)
 };

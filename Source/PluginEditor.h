@@ -14,11 +14,11 @@
 //==============================================================================
 /**
 */
-class SmileyQAudioProcessorEditor  : public juce::AudioProcessorEditor
+class GraphicEQAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    SmileyQAudioProcessorEditor (SmileyQAudioProcessor&);
-    ~SmileyQAudioProcessorEditor() override;
+    GraphicEQAudioProcessorEditor (GraphicEQAudioProcessor&);
+    ~GraphicEQAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -27,7 +27,7 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    SmileyQAudioProcessor& audioProcessor;
+    GraphicEQAudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SmileyQAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GraphicEQAudioProcessorEditor)
 };
