@@ -10,6 +10,22 @@
 
 #include <JuceHeader.h>
 
+struct ChainSettings {
+    float band20Gain {0}, band32Gain {0}, band64Gain {0}, band125Gain {0},
+    band250Gain {0}, band500Gain {0}, band1kGain {0}, band2kGain {0},
+    band4kGain {0}, band8kGain {0}, band16kGain {0}, band20kGain {0};
+    
+    float band20Freq {20.f}, band32Freq {32.f}, band64Freq {64.f}, band125Freq {125.f},
+    band250Freq {250.f}, band500Freq {500.f}, band1kFreq {1000.f}, band2kFreq {2000.f},
+    band4kFreq {4000.f}, band8kFreq {8000.f}, band16kFreq {16000.f}, band20kFreq {20000.f};
+    
+    float band20Quality {1.0f}, band32Quality {1.0f}, band64Quality {1.0f}, band125Quality {1.0f},
+    band250Quality {0.5f}, band500Quality {0.5f}, band1kQuality {0.5f}, band2kQuality {1.0f},
+    band4kQuality {1.0f}, band8kQuality {1.0f}, band16kQuality {1.0f}, band20kQuality {1.0f};
+};
+
+ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
+
 //==============================================================================
 /**
 */
@@ -66,6 +82,23 @@ private:
     using MonoChain = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter>;
     // Need 2 for stereo 
     MonoChain leftChain, rightChain;
+    
+    // needed for indices of chain parameters when updating chain values in DSP
+    enum ChainPositions
+    {
+        band20,
+        band32,
+        band64,
+        band125,
+        band250,
+        band500,
+        band1k,
+        band2k,
+        band4k,
+        band8k,
+        band16k,
+        band20k
+    };
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GraphicEQAudioProcessor)

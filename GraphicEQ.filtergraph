@@ -65,7 +65,7 @@
           uiLastY_Normal="152" uiopen_Normal="1">
     <PLUGIN name="AUAudioFilePlayer" format="AudioUnit" category="Generator"
             manufacturer="Apple" version="1.6.0" file="AudioUnit:Generators/augn,afpl,appl"
-            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="18d56ad4086"
+            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="18d56de99db"
             numInputs="0" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="6163676e"/>
     <STATE>536.hAGaoMGcv.C1AHv.DTfAGfPBJr.Gc3wGgvUag4VclE1XzUmbkIGUjEFcg8EDarVPUAkbkMWYzAUYxMWZyQWYtQ2TzEFcksTY4c0b0IFc4AWYWYWYxMWZu4FUzkGbk8EDOXVZrUVKxUlYkIWYtMVYyQkag0VYRDFbvwFPgxvzM3vCPDQFXYTZrUlSg0VYWIUYmk1atMmWIM2TkwVYiQWYjYTZrU1WPnxKUMWYxM2KJE1Xq8BQkM2Zz8FbuzTcyk1XuXzaMU0bkYVcr0TZ34RavMSnRP8DTTgEWfQFZ3kTkcVZu4FQuU1bL81avokTkcVZu4FQgQWXeAADIM2TkwVYiQWYjIUYmk1atokTkcVZu4lSg0VYH7DDvA...........NbSA..X...................XiaTP...........2zt2v1D+McsfskJcEVIlSA....Pd8JPA.....................................+++2+C...........hoWA7++u+WBZ4TY2AhTkcVZu4VBRDlYvwFD.HQX0claQCBDVYTZrUFHwfUUtQWZzwVYjA.B.jA.l.vJ.jD.QAPV.3E.vAPc.nG.6APe.PH.MBPk.PJ.QCvz.vM.qCf8AjP.TDPEAfX.IF.kATY.ZF.mADZ.jFvp........BD..........h...................APK</STATE>
@@ -76,11 +76,11 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="8" x="0.3125" y="0.55" useARA="0" uiLastX_Normal="589" uiLastY_Normal="212"
-          uiopen_Normal="1">
-    <PLUGIN name="GraphicEQ" format="VST3" category="Fx" manufacturer="yourcompany"
-            version="1.0.0" file="/Users/Jack/Library/Audio/Plug-Ins/VST3/SmileyQ.vst3"
-            uniqueId="3a9d826" isInstrument="0" fileTime="18d56a28680" infoUpdateTime="18d56ad4086"
+  <FILTER uid="9" x="0.33125" y="0.5673076923076923" useARA="0" uiLastX_Normal="448"
+          uiLastY_Normal="368" uiopen_Normal="0">
+    <PLUGIN name="GraphicEQ" format="VST3" category="Fx" manufacturer="Hakurosalix"
+            version="1.0.0" file="/Users/Jack/Library/Audio/Plug-Ins/VST3/GraphicEQ.vst3"
+            uniqueId="3a9d826" isInstrument="0" fileTime="18d56dc7118" infoUpdateTime="18d56de99db"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="acfcfcdb"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
@@ -93,8 +93,8 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="8" dstChannel="0"/>
-  <CONNECTION srcFilter="6" srcChannel="1" dstFilter="8" dstChannel="1"/>
-  <CONNECTION srcFilter="8" srcChannel="0" dstFilter="3" dstChannel="0"/>
-  <CONNECTION srcFilter="8" srcChannel="1" dstFilter="3" dstChannel="1"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="9" dstChannel="0"/>
+  <CONNECTION srcFilter="6" srcChannel="1" dstFilter="9" dstChannel="1"/>
+  <CONNECTION srcFilter="9" srcChannel="0" dstFilter="3" dstChannel="0"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="3" dstChannel="1"/>
 </FILTERGRAPH>
