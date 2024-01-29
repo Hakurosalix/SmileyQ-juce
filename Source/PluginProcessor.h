@@ -57,6 +57,16 @@ public:
     juce::AudioProcessorValueTreeState apvts {*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
+    using Filter = juce::dsp::IIR::Filter<float>;
+    
+    // Specific to cut filters with 4 options for filters i.e. 12 dB/oct, 24 dB/oct, etc
+    // using CutFilter = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter>;
+    
+    // Mono Chain represents our mono signal path
+    using MonoChain = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter, Filter>;
+    // Need 2 for stereo 
+    MonoChain leftChain, rightChain;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SmileyQAudioProcessor)
 };
