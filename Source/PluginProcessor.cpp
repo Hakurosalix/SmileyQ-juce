@@ -107,82 +107,7 @@ void GraphicEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     
     auto chainSettings = getChainSettings(apvts);
     
-    auto band20Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 
-                                                                                  chainSettings.band20Freq,
-                                                                                  chainSettings.band20Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band20Gain));
-    auto band32Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band32Freq,
-                                                                                  chainSettings.band32Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band32Gain));
-    auto band64Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band64Freq,
-                                                                                  chainSettings.band64Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band64Gain));
-    auto band125Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band125Freq,
-                                                                                  chainSettings.band125Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band125Gain));
-    auto band250Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band250Freq,
-                                                                                  chainSettings.band250Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band250Gain));
-    auto band500Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band500Freq,
-                                                                                  chainSettings.band500Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band500Gain));
-    auto band1kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band1kFreq,
-                                                                                  chainSettings.band1kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band1kGain));
-    auto band2kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band2kFreq,
-                                                                                  chainSettings.band2kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band2kGain));
-    auto band4kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band4kFreq,
-                                                                                  chainSettings.band4kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band4kGain));
-    auto band8kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band8kFreq,
-                                                                                  chainSettings.band8kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band8kGain));
-    auto band16kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band16kFreq,
-                                                                                  chainSettings.band16kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band16kGain));
-    auto band20kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-                                                                                  chainSettings.band20kFreq,
-                                                                                  chainSettings.band20kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band20kGain));
-    
-    *leftChain.get<ChainPositions::band20>().coefficients = *band20Coefficients;
-    *leftChain.get<ChainPositions::band32>().coefficients = *band32Coefficients;
-    *leftChain.get<ChainPositions::band64>().coefficients = *band64Coefficients;
-    *leftChain.get<ChainPositions::band125>().coefficients = *band125Coefficients;
-    *leftChain.get<ChainPositions::band250>().coefficients = *band250Coefficients;
-    *leftChain.get<ChainPositions::band500>().coefficients = *band500Coefficients;
-    *leftChain.get<ChainPositions::band1k>().coefficients = *band1kCoefficients;
-    *leftChain.get<ChainPositions::band2k>().coefficients = *band2kCoefficients;
-    *leftChain.get<ChainPositions::band4k>().coefficients = *band4kCoefficients;
-    *leftChain.get<ChainPositions::band8k>().coefficients = *band8kCoefficients;
-    *leftChain.get<ChainPositions::band16k>().coefficients = *band16kCoefficients;
-    *leftChain.get<ChainPositions::band20k>().coefficients = *band20kCoefficients;
-    
-    *rightChain.get<ChainPositions::band20>().coefficients = *band20Coefficients;
-    *rightChain.get<ChainPositions::band32>().coefficients = *band32Coefficients;
-    *rightChain.get<ChainPositions::band64>().coefficients = *band64Coefficients;
-    *rightChain.get<ChainPositions::band125>().coefficients = *band125Coefficients;
-    *rightChain.get<ChainPositions::band250>().coefficients = *band250Coefficients;
-    *rightChain.get<ChainPositions::band500>().coefficients = *band500Coefficients;
-    *rightChain.get<ChainPositions::band1k>().coefficients = *band1kCoefficients;
-    *rightChain.get<ChainPositions::band2k>().coefficients = *band2kCoefficients;
-    *rightChain.get<ChainPositions::band4k>().coefficients = *band4kCoefficients;
-    *rightChain.get<ChainPositions::band8k>().coefficients = *band8kCoefficients;
-    *rightChain.get<ChainPositions::band16k>().coefficients = *band16kCoefficients;
-    *rightChain.get<ChainPositions::band20k>().coefficients = *band20kCoefficients;
-    
-    
+    updatePeakFilters(chainSettings);
     
 }
 
@@ -235,80 +160,7 @@ void GraphicEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     
     auto chainSettings = getChainSettings(apvts);
     
-    auto band20Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band20Freq,
-                                                                                  chainSettings.band20Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band20Gain));
-    auto band32Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band32Freq,
-                                                                                  chainSettings.band32Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band32Gain));
-    auto band64Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band64Freq,
-                                                                                  chainSettings.band64Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band64Gain));
-    auto band125Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band125Freq,
-                                                                                  chainSettings.band125Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band125Gain));
-    auto band250Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band250Freq,
-                                                                                  chainSettings.band250Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band250Gain));
-    auto band500Coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band500Freq,
-                                                                                  chainSettings.band500Quality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band500Gain));
-    auto band1kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band1kFreq,
-                                                                                  chainSettings.band1kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band1kGain));
-    auto band2kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band2kFreq,
-                                                                                  chainSettings.band2kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band2kGain));
-    auto band4kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band4kFreq,
-                                                                                  chainSettings.band4kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band4kGain));
-    auto band8kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band8kFreq,
-                                                                                  chainSettings.band8kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band8kGain));
-    auto band16kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band16kFreq,
-                                                                                  chainSettings.band16kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band16kGain));
-    auto band20kCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-                                                                                  chainSettings.band20kFreq,
-                                                                                  chainSettings.band20kQuality,
-                                                                                  juce::Decibels::decibelsToGain(chainSettings.band20kGain));
-    
-    *leftChain.get<ChainPositions::band20>().coefficients = *band20Coefficients;
-    *leftChain.get<ChainPositions::band32>().coefficients = *band32Coefficients;
-    *leftChain.get<ChainPositions::band64>().coefficients = *band64Coefficients;
-    *leftChain.get<ChainPositions::band125>().coefficients = *band125Coefficients;
-    *leftChain.get<ChainPositions::band250>().coefficients = *band250Coefficients;
-    *leftChain.get<ChainPositions::band500>().coefficients = *band500Coefficients;
-    *leftChain.get<ChainPositions::band1k>().coefficients = *band1kCoefficients;
-    *leftChain.get<ChainPositions::band2k>().coefficients = *band2kCoefficients;
-    *leftChain.get<ChainPositions::band4k>().coefficients = *band4kCoefficients;
-    *leftChain.get<ChainPositions::band8k>().coefficients = *band8kCoefficients;
-    *leftChain.get<ChainPositions::band16k>().coefficients = *band16kCoefficients;
-    *leftChain.get<ChainPositions::band20k>().coefficients = *band20kCoefficients;
-    
-    *rightChain.get<ChainPositions::band20>().coefficients = *band20Coefficients;
-    *rightChain.get<ChainPositions::band32>().coefficients = *band32Coefficients;
-    *rightChain.get<ChainPositions::band64>().coefficients = *band64Coefficients;
-    *rightChain.get<ChainPositions::band125>().coefficients = *band125Coefficients;
-    *rightChain.get<ChainPositions::band250>().coefficients = *band250Coefficients;
-    *rightChain.get<ChainPositions::band500>().coefficients = *band500Coefficients;
-    *rightChain.get<ChainPositions::band1k>().coefficients = *band1kCoefficients;
-    *rightChain.get<ChainPositions::band2k>().coefficients = *band2kCoefficients;
-    *rightChain.get<ChainPositions::band4k>().coefficients = *band4kCoefficients;
-    *rightChain.get<ChainPositions::band8k>().coefficients = *band8kCoefficients;
-    *rightChain.get<ChainPositions::band16k>().coefficients = *band16kCoefficients;
-    *rightChain.get<ChainPositions::band20k>().coefficients = *band20kCoefficients;
+    updatePeakFilters(chainSettings);
     
     
     
@@ -357,29 +209,70 @@ ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts)
 {
     ChainSettings chainSettings;
     
-    chainSettings.band20Gain = apvts.getRawParameterValue("Band 20")->load();
-    chainSettings.band32Gain = apvts.getRawParameterValue("Band 32")->load();
-    chainSettings.band64Gain = apvts.getRawParameterValue("Band 64")->load();
-    chainSettings.band125Gain = apvts.getRawParameterValue("Band 125")->load();
-    chainSettings.band250Gain = apvts.getRawParameterValue("Band 250")->load();
-    chainSettings.band500Gain = apvts.getRawParameterValue("Band 500")->load();
-    chainSettings.band1kGain = apvts.getRawParameterValue("Band 1k")->load();
-    chainSettings.band2kGain = apvts.getRawParameterValue("Band 2k")->load();
-    chainSettings.band4kGain = apvts.getRawParameterValue("Band 4k")->load();
-    chainSettings.band8kGain = apvts.getRawParameterValue("Band 8k")->load();
-    chainSettings.band16kGain = apvts.getRawParameterValue("Band 16k")->load();
-    chainSettings.band20kGain = apvts.getRawParameterValue("Band 20k")->load();
+//    chainSettings.band20Gain = apvts.getRawParameterValue("Band 20")->load();
+//    chainSettings.band32Gain = apvts.getRawParameterValue("Band 32")->load();
+//    chainSettings.band64Gain = apvts.getRawParameterValue("Band 64")->load();
+//    chainSettings.band125Gain = apvts.getRawParameterValue("Band 125")->load();
+//    chainSettings.band250Gain = apvts.getRawParameterValue("Band 250")->load();
+//    chainSettings.band500Gain = apvts.getRawParameterValue("Band 500")->load();
+//    chainSettings.band1kGain = apvts.getRawParameterValue("Band 1k")->load();
+//    chainSettings.band2kGain = apvts.getRawParameterValue("Band 2k")->load();
+//    chainSettings.band4kGain = apvts.getRawParameterValue("Band 4k")->load();
+//    chainSettings.band8kGain = apvts.getRawParameterValue("Band 8k")->load();
+//    chainSettings.band16kGain = apvts.getRawParameterValue("Band 16k")->load();
+//    chainSettings.band20kGain = apvts.getRawParameterValue("Band 20k")->load();
+    
+    for (int i = 0; i < chainSettings.bandGains.size(); ++i) {
+        chainSettings.bandGains[i] = apvts.getRawParameterValue(bandNames[i])->load();
+    }
     
     return chainSettings;
+}
+
+void GraphicEQAudioProcessor::updatePeakFilters(const ChainSettings &chainSettings)
+{
+    using Coefficients = Filter::CoefficientsPtr;
+    std::vector<Coefficients> bandCoefficients;
+    
+    for (int i = 0; i < bandNames.size(); ++i) {
+        bandCoefficients.push_back(juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
+                                                                                    chainSettings.bandFreqs[i],
+                                                                                    chainSettings.bandQualities[i],
+                                                                                    juce::Decibels::decibelsToGain(chainSettings.bandGains[i])));
+    }
+    
+    *leftChain.get<ChainPositions::band20>().coefficients = *bandCoefficients[0];
+    *leftChain.get<ChainPositions::band32>().coefficients = *bandCoefficients[1];
+    *leftChain.get<ChainPositions::band64>().coefficients = *bandCoefficients[2];
+    *leftChain.get<ChainPositions::band125>().coefficients = *bandCoefficients[3];
+    *leftChain.get<ChainPositions::band250>().coefficients = *bandCoefficients[4];
+    *leftChain.get<ChainPositions::band500>().coefficients = *bandCoefficients[5];
+    *leftChain.get<ChainPositions::band1k>().coefficients = *bandCoefficients[6];
+    *leftChain.get<ChainPositions::band2k>().coefficients = *bandCoefficients[7];
+    *leftChain.get<ChainPositions::band4k>().coefficients = *bandCoefficients[8];
+    *leftChain.get<ChainPositions::band8k>().coefficients = *bandCoefficients[9];
+    *leftChain.get<ChainPositions::band16k>().coefficients = *bandCoefficients[10];
+    *leftChain.get<ChainPositions::band20k>().coefficients = *bandCoefficients[11];
+    
+    *rightChain.get<ChainPositions::band20>().coefficients = *bandCoefficients[0];
+    *rightChain.get<ChainPositions::band32>().coefficients = *bandCoefficients[1];
+    *rightChain.get<ChainPositions::band64>().coefficients = *bandCoefficients[2];
+    *rightChain.get<ChainPositions::band125>().coefficients = *bandCoefficients[3];
+    *rightChain.get<ChainPositions::band250>().coefficients = *bandCoefficients[4];
+    *rightChain.get<ChainPositions::band500>().coefficients = *bandCoefficients[5];
+    *rightChain.get<ChainPositions::band1k>().coefficients = *bandCoefficients[6];
+    *rightChain.get<ChainPositions::band2k>().coefficients = *bandCoefficients[7];
+    *rightChain.get<ChainPositions::band4k>().coefficients = *bandCoefficients[8];
+    *rightChain.get<ChainPositions::band8k>().coefficients = *bandCoefficients[9];
+    *rightChain.get<ChainPositions::band16k>().coefficients = *bandCoefficients[10];
+    *rightChain.get<ChainPositions::band20k>().coefficients = *bandCoefficients[11];
+    
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout GraphicEQAudioProcessor::createParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout parameterLayout;
     float rangeStart, rangeEnd, intervalValue, skewFactor, defaultValue;
-    std::vector<juce::String> bandNames {"Band 20", "Band 32", "Band 64", "Band 125",
-                                        "Band 250", "Band 500", "Band 1k", "Band 2k",
-                                        "Band 4k", "Band 8k", "Band 16k", "Band 20k"};
     rangeStart = -12.f;
     rangeEnd = 12.f;
     intervalValue = 0.5f;
