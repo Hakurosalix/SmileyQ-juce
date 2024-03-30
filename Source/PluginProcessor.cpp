@@ -162,9 +162,6 @@ void GraphicEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     
     updatePeakFilters(chainSettings);
     
-    
-    
-
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     
@@ -222,19 +219,6 @@ ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts)
 {
     ChainSettings chainSettings;
     
-//    chainSettings.band20Gain = apvts.getRawParameterValue("Band 20")->load();
-//    chainSettings.band32Gain = apvts.getRawParameterValue("Band 32")->load();
-//    chainSettings.band64Gain = apvts.getRawParameterValue("Band 64")->load();
-//    chainSettings.band125Gain = apvts.getRawParameterValue("Band 125")->load();
-//    chainSettings.band250Gain = apvts.getRawParameterValue("Band 250")->load();
-//    chainSettings.band500Gain = apvts.getRawParameterValue("Band 500")->load();
-//    chainSettings.band1kGain = apvts.getRawParameterValue("Band 1k")->load();
-//    chainSettings.band2kGain = apvts.getRawParameterValue("Band 2k")->load();
-//    chainSettings.band4kGain = apvts.getRawParameterValue("Band 4k")->load();
-//    chainSettings.band8kGain = apvts.getRawParameterValue("Band 8k")->load();
-//    chainSettings.band16kGain = apvts.getRawParameterValue("Band 16k")->load();
-//    chainSettings.band20kGain = apvts.getRawParameterValue("Band 20k")->load();
-    
     for (int i = 0; i < chainSettings.bandGains.size(); ++i) {
         chainSettings.bandGains[i] = apvts.getRawParameterValue(bandNames[i])->load();
     }
@@ -254,32 +238,30 @@ void GraphicEQAudioProcessor::updatePeakFilters(const ChainSettings &chainSettin
                                                                                     juce::Decibels::decibelsToGain(chainSettings.bandGains[i])));
     }
     
-    *leftChain.get<ChainPositions::band20>().coefficients = *bandCoefficients[0];
-    *leftChain.get<ChainPositions::band32>().coefficients = *bandCoefficients[1];
-    *leftChain.get<ChainPositions::band64>().coefficients = *bandCoefficients[2];
-    *leftChain.get<ChainPositions::band125>().coefficients = *bandCoefficients[3];
-    *leftChain.get<ChainPositions::band250>().coefficients = *bandCoefficients[4];
-    *leftChain.get<ChainPositions::band500>().coefficients = *bandCoefficients[5];
-    *leftChain.get<ChainPositions::band1k>().coefficients = *bandCoefficients[6];
-    *leftChain.get<ChainPositions::band2k>().coefficients = *bandCoefficients[7];
-    *leftChain.get<ChainPositions::band4k>().coefficients = *bandCoefficients[8];
-    *leftChain.get<ChainPositions::band8k>().coefficients = *bandCoefficients[9];
-    *leftChain.get<ChainPositions::band16k>().coefficients = *bandCoefficients[10];
-    *leftChain.get<ChainPositions::band20k>().coefficients = *bandCoefficients[11];
-    
-    *rightChain.get<ChainPositions::band20>().coefficients = *bandCoefficients[0];
-    *rightChain.get<ChainPositions::band32>().coefficients = *bandCoefficients[1];
-    *rightChain.get<ChainPositions::band64>().coefficients = *bandCoefficients[2];
-    *rightChain.get<ChainPositions::band125>().coefficients = *bandCoefficients[3];
-    *rightChain.get<ChainPositions::band250>().coefficients = *bandCoefficients[4];
-    *rightChain.get<ChainPositions::band500>().coefficients = *bandCoefficients[5];
-    *rightChain.get<ChainPositions::band1k>().coefficients = *bandCoefficients[6];
-    *rightChain.get<ChainPositions::band2k>().coefficients = *bandCoefficients[7];
-    *rightChain.get<ChainPositions::band4k>().coefficients = *bandCoefficients[8];
-    *rightChain.get<ChainPositions::band8k>().coefficients = *bandCoefficients[9];
-    *rightChain.get<ChainPositions::band16k>().coefficients = *bandCoefficients[10];
-    *rightChain.get<ChainPositions::band20k>().coefficients = *bandCoefficients[11];
-    
+    updateChainCoefficients(leftChain, bandCoefficients);
+    updateChainCoefficients(rightChain, bandCoefficients);
+
+}
+
+void GraphicEQAudioProcessor::updateChainCoefficients(MonoChain &chain, std::vector<Coefficients> &bandCoefficients)
+{
+    updateCoefficients(chain.get<ChainPositions::band20>().coefficients, bandCoefficients[0]);
+    updateCoefficients(chain.get<ChainPositions::band32>().coefficients, bandCoefficients[1]);
+    updateCoefficients(chain.get<ChainPositions::band64>().coefficients, bandCoefficients[2]);
+    updateCoefficients(chain.get<ChainPositions::band125>().coefficients, bandCoefficients[3]);
+    updateCoefficients(chain.get<ChainPositions::band250>().coefficients, bandCoefficients[4]);
+    updateCoefficients(chain.get<ChainPositions::band500>().coefficients, bandCoefficients[5]);
+    updateCoefficients(chain.get<ChainPositions::band1k>().coefficients, bandCoefficients[6]);
+    updateCoefficients(chain.get<ChainPositions::band2k>().coefficients, bandCoefficients[7]);
+    updateCoefficients(chain.get<ChainPositions::band4k>().coefficients, bandCoefficients[8]);
+    updateCoefficients(chain.get<ChainPositions::band8k>().coefficients, bandCoefficients[9]);
+    updateCoefficients(chain.get<ChainPositions::band16k>().coefficients, bandCoefficients[10]);
+    updateCoefficients(chain.get<ChainPositions::band20k>().coefficients, bandCoefficients[11]);
+}
+
+void GraphicEQAudioProcessor::updateCoefficients(Filter::CoefficientsPtr &old, const Filter::CoefficientsPtr &replacements)
+{
+    *old = *replacements;
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout GraphicEQAudioProcessor::createParameterLayout()
@@ -292,8 +274,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GraphicEQAudioProcessor::cre
     skewFactor = 1.f;
     defaultValue = 0.0f;
     
-    // All bands should probably be duplicates with different names... need to figure out
-    //  how to set their frequencies when get to DSP
+    // All bands should probably be duplicates with different names...
     for (juce::String bandName : bandNames) {
         parameterLayout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(bandName, 1),
                                                                         bandName,
