@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin processor.
+    This file contains the framework code for a JUCE Graphic EQ plugin processor.
 
   ==============================================================================
 */
@@ -18,7 +18,7 @@ struct ChainSettings {
 
 ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
 
-std::vector<juce::String> bandNames {"Band 20", "Band 32", "Band 64", "Band 125",
+static std::vector<juce::String> allBandNames {"Band 20", "Band 32", "Band 64", "Band 125",
                                     "Band 250", "Band 500", "Band 1k", "Band 2k",
                                     "Band 4k", "Band 8k", "Band 16k", "Band 20k"};
 

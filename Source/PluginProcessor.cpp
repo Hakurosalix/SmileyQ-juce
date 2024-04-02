@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin processor.
+    This file contains the framework code for a JUCE Graphic EQ plugin processor.
 
   ==============================================================================
 */
@@ -108,7 +108,6 @@ void GraphicEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     auto chainSettings = getChainSettings(apvts);
     
     updatePeakFilters(chainSettings);
-    
 }
 
 void GraphicEQAudioProcessor::releaseResources()
@@ -184,8 +183,8 @@ bool GraphicEQAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GraphicEQAudioProcessor::createEditor()
 {
-    // return new SmileyQAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new GraphicEQAudioProcessorEditor (*this);
+    // return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -220,7 +219,7 @@ ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts)
     ChainSettings chainSettings;
     
     for (int i = 0; i < chainSettings.bandGains.size(); ++i) {
-        chainSettings.bandGains[i] = apvts.getRawParameterValue(bandNames[i])->load();
+        chainSettings.bandGains[i] = apvts.getRawParameterValue(allBandNames[i])->load();
     }
     
     return chainSettings;
@@ -231,7 +230,7 @@ void GraphicEQAudioProcessor::updatePeakFilters(const ChainSettings &chainSettin
     using Coefficients = Filter::CoefficientsPtr;
     std::vector<Coefficients> bandCoefficients;
     
-    for (int i = 0; i < bandNames.size(); ++i) {
+    for (int i = 0; i < allBandNames.size(); ++i) {
         bandCoefficients.push_back(juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
                                                                                     chainSettings.bandFreqs[i],
                                                                                     chainSettings.bandQualities[i],
@@ -240,7 +239,6 @@ void GraphicEQAudioProcessor::updatePeakFilters(const ChainSettings &chainSettin
     
     updateChainCoefficients(leftChain, bandCoefficients);
     updateChainCoefficients(rightChain, bandCoefficients);
-
 }
 
 void GraphicEQAudioProcessor::updateChainCoefficients(MonoChain &chain, std::vector<Coefficients> &bandCoefficients)
@@ -275,7 +273,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GraphicEQAudioProcessor::cre
     defaultValue = 0.0f;
     
     // All bands should probably be duplicates with different names...
-    for (juce::String bandName : bandNames) {
+    for (juce::String bandName : allBandNames) {
         parameterLayout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(bandName, 1),
                                                                         bandName,
                                                                         juce::NormalisableRange<float>(rangeStart, rangeEnd, intervalValue, skewFactor),
