@@ -40,17 +40,32 @@ private:
     GraphicEQAudioProcessor& audioProcessor;
     
     CustomVerticalSlider band20Slider,
-    band32Slider,
-    band64Slider,
-    band125Slider,
-    band250Slider,
-    band500Slider,
-    band1kSlider,
-    band2kSlider,
-    band4kSlider,
-    band8kSlider,
-    band16kSlider,
-    band20kSlider;
+                            band32Slider,
+                            band64Slider,
+                            band125Slider,
+                            band250Slider,
+                            band500Slider,
+                            band1kSlider,
+                            band2kSlider,
+                            band4kSlider,
+                            band8kSlider,
+                            band16kSlider,
+                            band20kSlider;
+    
+    using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    
+    Attachment band20SliderAttachment,
+                band32SliderAttachment,
+                band64SliderAttachment,
+                band125SliderAttachment,
+                band250SliderAttachment,
+                band500SliderAttachment,
+                band1kSliderAttachment,
+                band2kSliderAttachment,
+                band4kSliderAttachment,
+                band8kSliderAttachment,
+                band16kSliderAttachment,
+                band20kSliderAttachment;
     
     std::vector<juce::Component*> getSliders();
 
