@@ -12,6 +12,18 @@
 //==============================================================================
 GraphicEQAudioProcessorEditor::GraphicEQAudioProcessorEditor (GraphicEQAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
+    band20Slider(*audioProcessor.apvts.getParameter(allBandNames[0])),
+    band32Slider(*audioProcessor.apvts.getParameter(allBandNames[1])),
+    band64Slider(*audioProcessor.apvts.getParameter(allBandNames[2])),
+    band125Slider(*audioProcessor.apvts.getParameter(allBandNames[3])),
+    band250Slider(*audioProcessor.apvts.getParameter(allBandNames[4])),
+    band500Slider(*audioProcessor.apvts.getParameter(allBandNames[5])),
+    band1kSlider(*audioProcessor.apvts.getParameter(allBandNames[6])),
+    band2kSlider(*audioProcessor.apvts.getParameter(allBandNames[7])),
+    band4kSlider(*audioProcessor.apvts.getParameter(allBandNames[8])),
+    band8kSlider(*audioProcessor.apvts.getParameter(allBandNames[9])),
+    band16kSlider(*audioProcessor.apvts.getParameter(allBandNames[10])),
+    band20kSlider(*audioProcessor.apvts.getParameter(allBandNames[11])),
     band20SliderAttachment(audioProcessor.apvts, allBandNames[0], band20Slider),
     band32SliderAttachment(audioProcessor.apvts, allBandNames[1], band32Slider),
     band64SliderAttachment(audioProcessor.apvts, allBandNames[2], band64Slider),
@@ -42,12 +54,13 @@ GraphicEQAudioProcessorEditor::~GraphicEQAudioProcessorEditor()
 //==============================================================================
 void GraphicEQAudioProcessorEditor::paint (juce::Graphics& g)
 {
+    using namespace juce;
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.fillAll (Colours::black);
+    
+    auto bounds = getLocalBounds();
+    g.setColour(Colours::ghostwhite);
+    g.drawRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 }
 
 void GraphicEQAudioProcessorEditor::resized()

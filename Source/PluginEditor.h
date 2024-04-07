@@ -11,13 +11,42 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+struct LookAndFeel : juce::LookAndFeel_V4
+{
+    void drawLinearSlider (juce::Graphics&,
+                                int x, int y, int width, int height,
+                                float sliderPos,
+                                float minSliderPos,
+                                float maxSliderPos,
+                                juce::Slider::SliderStyle,
+                                juce::Slider&) override {}
+};
+
 struct CustomVerticalSlider : juce::Slider
 {
-    CustomVerticalSlider() : juce::Slider(juce::Slider::SliderStyle::LinearVertical,
-                                        juce::Slider::TextEntryBoxPosition::NoTextBox)
+public:
+    CustomVerticalSlider(juce::RangedAudioParameter& rap) :
+    juce::Slider(juce::Slider::SliderStyle::LinearVertical,
+                                        juce::Slider::TextEntryBoxPosition::NoTextBox),
+    param(&rap)
     {
-        
+        setLookAndFeel(&lnf);
     }
+    
+    ~CustomVerticalSlider()
+    {
+        setLookAndFeel(nullptr);
+    }
+    
+    void paint(juce::Graphics& g) override {}
+    juce::Rectangle<int> getSliderBounds() const;
+    int getTextHeight() const {return 14;}
+    juce::String getDisplayString() const;
+    
+private:
+    LookAndFeel lnf;
+    juce::RangedAudioParameter* param;
+    juce::String const displayString {"Hz"};
     
 };
 
