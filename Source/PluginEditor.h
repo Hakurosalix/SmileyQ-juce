@@ -19,14 +19,14 @@ struct LookAndFeel : juce::LookAndFeel_V4
                                 float minSliderPos,
                                 float maxSliderPos,
                                 juce::Slider::SliderStyle,
-                                juce::Slider&) override {}
+                                juce::Slider&) override;
 };
 
 struct CustomVerticalSlider : juce::Slider
 {
 public:
     CustomVerticalSlider(juce::RangedAudioParameter& rap) :
-    juce::Slider(juce::Slider::SliderStyle::LinearVertical,
+                                        juce::Slider(juce::Slider::SliderStyle::LinearVertical,
                                         juce::Slider::TextEntryBoxPosition::NoTextBox),
     param(&rap)
     {
@@ -38,10 +38,10 @@ public:
         setLookAndFeel(nullptr);
     }
     
-    void paint(juce::Graphics& g) override {}
+    //void paint(juce::Graphics& g) override;
     juce::Rectangle<int> getSliderBounds() const;
     int getTextHeight() const {return 14;}
-    juce::String getDisplayString() const;
+    juce::String getDisplayString() const {return displayString;}
     
 private:
     LookAndFeel lnf;

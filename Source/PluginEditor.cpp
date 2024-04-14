@@ -9,6 +9,74 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+void LookAndFeel::drawLinearSlider(juce::Graphics &g,
+                                   int x,
+                                   int y,
+                                   int width,
+                                   int height,
+                                   float sliderPos,
+                                   float minSliderPos,
+                                   float maxSliderPos,
+                                   juce::Slider::SliderStyle style,
+                                   juce::Slider &slider)
+{
+    using namespace juce;
+
+    auto trackWidth = jmin (6.0f, (float) width * 0.25f);
+
+    Point<float> startPoint ((float) x + (float) width * 0.5f,
+                             (float) (height + y));
+
+    Point<float> endPoint (startPoint.x,
+                            (float) y);
+
+    Path backgroundTrack;
+    backgroundTrack.startNewSubPath (startPoint);
+    backgroundTrack.lineTo (endPoint);
+    g.setColour (slider.findColour (Slider::backgroundColourId));
+    g.strokePath (backgroundTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
+
+    Path valueTrack;
+    Point<float> minPoint, maxPoint;
+
+    auto kx = ((float) x + (float) width * 0.5f);
+    auto ky = sliderPos;
+
+    minPoint = startPoint;
+    maxPoint = { kx, ky };
+
+    auto thumbWidth = getSliderThumbRadius (slider);
+
+    valueTrack.startNewSubPath (minPoint);
+    valueTrack.lineTo (maxPoint);
+    g.setColour (slider.findColour (Slider::trackColourId));
+    g.strokePath (valueTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
+
+    g.setColour (slider.findColour (Slider::thumbColourId));
+    g.fillRect(Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (maxPoint));
+}
+
+//void CustomVerticalSlider::paint(juce::Graphics &g)
+//{
+//    using namespace juce;
+//    
+//    auto sliderBounds = getSliderBounds();
+//    getLookAndFeel().drawLinearSlider(g,
+//                                      sliderBounds.getX(),
+//                                      sliderBounds.getY(),
+//                                      sliderBounds.getWidth(),
+//                                      sliderBounds.getHeight(),
+//                                      getPositionOfValue(getValue()),
+//                                      getPositionOfValue(getMinimum()),
+//                                      getPositionOfValue(getMaximum()),
+//                                      getSliderStyle(),
+//                                      *this);
+//}
+
+juce::Rectangle<int> CustomVerticalSlider::getSliderBounds() const
+{
+    return getLocalBounds();
+}
 //==============================================================================
 GraphicEQAudioProcessorEditor::GraphicEQAudioProcessorEditor (GraphicEQAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
