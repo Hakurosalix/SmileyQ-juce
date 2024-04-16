@@ -6,6 +6,15 @@
   ==============================================================================
 */
 
+// Colours:
+// t1: 230u, 195u, 132u
+// t2: 149u, 127u, 184u
+// t3: 126u, 156u, 216u
+// t4: 127u, 180u, 202u
+// t5: 122u, 168u, 159u
+// t6: 210u, 126u, 153u
+// background: 42u, 42u, 55u
+
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -51,9 +60,43 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     valueTrack.lineTo (maxPoint);
     g.setColour (slider.findColour (Slider::trackColourId));
     g.strokePath (valueTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
+    
+    // Draw thumb
+    g.setColour (Colour(149u, 127u, 184u));
+    Rectangle<float> thumb = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (maxPoint);
+    g.fillRect(thumb);
+    
+    // Thumb grip
+    auto bounds = Rectangle<float>(x, y, width, height);
+    Rectangle<float> r;
+    r.setLeft(thumb.getCentre().getX() - (static_cast<float> (thumbWidth + 5)) / 2);
+    r.setRight(thumb.getCentre().getX() + (static_cast<float> (thumbWidth + 5)) / 2);
+    r.setTop(thumb.getCentre().getY() - (static_cast<float> (thumbWidth)) / 5);
+    r.setBottom(thumb.getCentre().getY() + (static_cast<float> (thumbWidth)) / 5);
+    g.setColour(Colours::black);
+    g.fillRect(r);
+    
+    // Draw parameter values
+    // If we can cast it, we know we can call member functions:
+    
+//    if (auto* cvs = dynamic_cast<CustomVerticalSlider*>(&slider)) {
+//        auto textBounds = cvs->getParameterTextBounds();
+//        Point<float> parameterPoint (textBounds.getCentreX(), textBounds.getCentreY());
+//        Rectangle<float> k = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (parameterPoint);
+//
+//        g.setFont(cvs->getTextHeight());
+//        auto text = cvs->getDisplayString();
+//        auto strWidth = g.getCurrentFont().getStringWidth(text);
+//        k.setSize(strWidth + 4, cvs->getTextHeight() + 2);
+//        g.fillRect(k);
+//        g.setColour(Colours::white);
+//        g.drawFittedText(text, k.toNearestInt(), juce::Justification::centred, 1);
+//    }
+}
 
-    g.setColour (slider.findColour (Slider::thumbColourId));
-    g.fillRect(Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (maxPoint));
+juce::String CustomVerticalSlider::getDisplayString() const
+{
+    return juce::String(getValue());
 }
 
 //void CustomVerticalSlider::paint(juce::Graphics &g)
@@ -61,6 +104,7 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
 //    using namespace juce;
 //    
 //    auto sliderBounds = getSliderBounds();
+//    
 //    getLookAndFeel().drawLinearSlider(g,
 //                                      sliderBounds.getX(),
 //                                      sliderBounds.getY(),
@@ -77,6 +121,7 @@ juce::Rectangle<int> CustomVerticalSlider::getSliderBounds() const
 {
     return getLocalBounds();
 }
+
 //==============================================================================
 GraphicEQAudioProcessorEditor::GraphicEQAudioProcessorEditor (GraphicEQAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
@@ -124,7 +169,7 @@ void GraphicEQAudioProcessorEditor::paint (juce::Graphics& g)
 {
     using namespace juce;
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (Colours::black);
+    g.fillAll (Colour(42u, 42u, 55u));
     
     auto bounds = getLocalBounds();
     g.setColour(Colours::ghostwhite);
@@ -154,13 +199,15 @@ void GraphicEQAudioProcessorEditor::resized()
     
     sliderSpace = bounds.getWidth() / 12;
     
-    for (juce::Component* slider : getSliders()) {
-        slider->setBounds(bounds.removeFromLeft(sliderSpace));
+    for (CustomVerticalSlider* slider : getSliders()) {
+        auto sliderBounds = bounds.removeFromLeft(sliderSpace);
+        //slider->setParameterTextBounds(sliderBounds.removeFromTop(14 * 1.5));
+        slider->setBounds(sliderBounds);
     }
     
 }
 
-std::vector<juce::Component*> GraphicEQAudioProcessorEditor::getSliders()
+std::vector<CustomVerticalSlider*> GraphicEQAudioProcessorEditor::getSliders()
 {
     return
     {
@@ -178,3 +225,4 @@ std::vector<juce::Component*> GraphicEQAudioProcessorEditor::getSliders()
         &band20kSlider
     };
 }
+

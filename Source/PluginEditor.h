@@ -41,7 +41,7 @@ public:
     //void paint(juce::Graphics& g) override;
     juce::Rectangle<int> getSliderBounds() const;
     int getTextHeight() const {return 14;}
-    juce::String getDisplayString() const {return displayString;}
+    juce::String getDisplayString() const;
     
 private:
     LookAndFeel lnf;
@@ -96,7 +96,7 @@ private:
                 band16kSliderAttachment,
                 band20kSliderAttachment;
     
-    std::vector<juce::Component*> getSliders();
+    std::vector<CustomVerticalSlider*> getSliders();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GraphicEQAudioProcessorEditor)
 };
