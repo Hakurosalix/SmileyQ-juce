@@ -6,7 +6,7 @@
   ==============================================================================
 */
 
-// Colours:
+// Colors:
 // t1: 230u, 195u, 132u
 // t2: 149u, 127u, 184u
 // t3: 126u, 156u, 216u
@@ -42,9 +42,24 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     Path backgroundTrack;
     backgroundTrack.startNewSubPath (startPoint);
     backgroundTrack.lineTo (endPoint);
-    g.setColour (slider.findColour (Slider::backgroundColourId));
+    //g.setColour (slider.findColour (Slider::backgroundColourId));
+    //g.setColour(Colour(130u, 90u, 103u));
+    g.setColour(Colour(66u, 56u, 82u));
     g.strokePath (backgroundTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
-
+    
+    // Draw notches
+    int xOffset = width / 4;
+    float yInterval = (startPoint.y - endPoint.y) / 8;
+    Rectangle<float> marker = Rectangle<float>(startPoint.x + xOffset, startPoint.y - 0.5, 10, 1);
+    for (int j = 0; j < 7; j++) {
+        marker.setY(marker.getY() - yInterval);
+        g.setColour(Colour(230u, 195u, 132u));
+        g.fillRect(marker);
+        marker.setX(startPoint.x - xOffset);
+        g.fillRect(marker);
+        marker.setX(startPoint.x + xOffset);
+    }
+    
     Path valueTrack;
     Point<float> minPoint, maxPoint;
 
@@ -78,16 +93,16 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     
     // Draw parameter values
     // If we can cast it, we know we can call member functions:
-    if (auto* cvs = dynamic_cast<CustomVerticalSlider*>(&slider)) {
-        Rectangle<float> k = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (startPoint);
-        g.setFont(cvs->getTextHeight());
-        auto text = cvs->getDisplayString();
-        auto strWidth = g.getCurrentFont().getStringWidth(text);
-        k.setSize(strWidth + 4, cvs->getTextHeight() + 2);
-        g.fillRect(k);
-        g.setColour(Colours::white);
-        g.drawFittedText(text, k.toNearestInt(), juce::Justification::centred, 1);
-    }
+//    if (auto* cvs = dynamic_cast<CustomVerticalSlider*>(&slider)) {
+//        Rectangle<float> k = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (startPoint);
+//        g.setFont(cvs->getTextHeight());
+//        auto text = cvs->getDisplayString();
+//        auto strWidth = g.getCurrentFont().getStringWidth(text);
+//        k.setSize(strWidth + 4, cvs->getTextHeight() + 2);
+//        g.fillRect(k);
+//        g.setColour(Colours::white);
+//        g.drawFittedText(text, k.toNearestInt(), juce::Justification::centred, 1);
+//    }
 }
 
 juce::String CustomVerticalSlider::getDisplayString() const
@@ -178,7 +193,6 @@ void GraphicEQAudioProcessorEditor::paint (juce::Graphics& g)
     
     yMargin = bounds.getHeight() * yMarginMultiplier;
     xMargin = bounds.getWidth() * xMarginMultiplier;
-    
 
     bounds.removeFromLeft(xMargin);
     bounds.removeFromRight(xMargin);
@@ -188,13 +202,13 @@ void GraphicEQAudioProcessorEditor::paint (juce::Graphics& g)
     sliderSpace = bounds.getWidth() / 12;
     
     for (int i = 0; i < allBandNames.size(); i++) {
-        g.setColour(Colours::black);
+        //g.setColour(Colours::black);
         auto sliderTextBounds = parameterTextMargin.removeFromLeft(sliderSpace);
         g.setFont(14);
-        auto text = "50";
-        auto strWidth = g.getCurrentFont().getStringWidth(text);
-        g.fillRect(sliderTextBounds);
-        g.setColour(Colours::white);
+        auto text = bandLabels[i];
+        //auto strWidth = g.getCurrentFont().getStringWidth(text);
+        //g.fillRect(sliderTextBounds);
+        g.setColour(Colour(230u, 195u, 132u));
         g.drawFittedText(text, sliderTextBounds.toNearestInt(), juce::Justification::centred, 1);
     }
 }

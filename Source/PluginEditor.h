@@ -97,6 +97,10 @@ private:
                 band20kSliderAttachment;
     
     std::vector<CustomVerticalSlider*> getSliders();
+    
+    std::vector<juce::String> const bandLabels {"20", "32", "64", "125",
+                                        "250", "500", "1k", "2k",
+                                        "4k", "8k", "16k", "20k"};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GraphicEQAudioProcessorEditor)
 };
