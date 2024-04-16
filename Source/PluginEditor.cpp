@@ -78,20 +78,16 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     
     // Draw parameter values
     // If we can cast it, we know we can call member functions:
-    
-//    if (auto* cvs = dynamic_cast<CustomVerticalSlider*>(&slider)) {
-//        auto textBounds = cvs->getParameterTextBounds();
-//        Point<float> parameterPoint (textBounds.getCentreX(), textBounds.getCentreY());
-//        Rectangle<float> k = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (parameterPoint);
-//
-//        g.setFont(cvs->getTextHeight());
-//        auto text = cvs->getDisplayString();
-//        auto strWidth = g.getCurrentFont().getStringWidth(text);
-//        k.setSize(strWidth + 4, cvs->getTextHeight() + 2);
-//        g.fillRect(k);
-//        g.setColour(Colours::white);
-//        g.drawFittedText(text, k.toNearestInt(), juce::Justification::centred, 1);
-//    }
+    if (auto* cvs = dynamic_cast<CustomVerticalSlider*>(&slider)) {
+        Rectangle<float> k = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (startPoint);
+        g.setFont(cvs->getTextHeight());
+        auto text = cvs->getDisplayString();
+        auto strWidth = g.getCurrentFont().getStringWidth(text);
+        k.setSize(strWidth + 4, cvs->getTextHeight() + 2);
+        g.fillRect(k);
+        g.setColour(Colours::white);
+        g.drawFittedText(text, k.toNearestInt(), juce::Justification::centred, 1);
+    }
 }
 
 juce::String CustomVerticalSlider::getDisplayString() const
@@ -99,23 +95,23 @@ juce::String CustomVerticalSlider::getDisplayString() const
     return juce::String(getValue());
 }
 
-//void CustomVerticalSlider::paint(juce::Graphics &g)
-//{
-//    using namespace juce;
-//    
-//    auto sliderBounds = getSliderBounds();
-//    
-//    getLookAndFeel().drawLinearSlider(g,
-//                                      sliderBounds.getX(),
-//                                      sliderBounds.getY(),
-//                                      sliderBounds.getWidth(),
-//                                      sliderBounds.getHeight(),
-//                                      getPositionOfValue(getValue()),
-//                                      getPositionOfValue(getMinimum()),
-//                                      getPositionOfValue(getMaximum()),
-//                                      getSliderStyle(),
-//                                      *this);
-//}
+void CustomVerticalSlider::paint(juce::Graphics &g)
+{
+    using namespace juce;
+    
+    auto sliderBounds = getSliderBounds();
+    
+    getLookAndFeel().drawLinearSlider(g,
+                                      sliderBounds.getX(),
+                                      sliderBounds.getY(),
+                                      sliderBounds.getWidth(),
+                                      sliderBounds.getHeight(),
+                                      getPositionOfValue(getValue()),
+                                      getPositionOfValue(getMinimum()),
+                                      getPositionOfValue(getMaximum()),
+                                      getSliderStyle(),
+                                      *this);
+}
 
 juce::Rectangle<int> CustomVerticalSlider::getSliderBounds() const
 {
@@ -174,6 +170,33 @@ void GraphicEQAudioProcessorEditor::paint (juce::Graphics& g)
     auto bounds = getLocalBounds();
     g.setColour(Colours::ghostwhite);
     g.drawRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+    
+    int yMargin, xMargin, sliderSpace;
+    float yMarginMultiplier, xMarginMultiplier;
+    yMarginMultiplier = 0.1;
+    xMarginMultiplier = 0.075;
+    
+    yMargin = bounds.getHeight() * yMarginMultiplier;
+    xMargin = bounds.getWidth() * xMarginMultiplier;
+    
+
+    bounds.removeFromLeft(xMargin);
+    bounds.removeFromRight(xMargin);
+    auto parameterTextMargin = bounds.removeFromTop(yMargin);
+    bounds.removeFromBottom(yMargin);
+    
+    sliderSpace = bounds.getWidth() / 12;
+    
+    for (int i = 0; i < allBandNames.size(); i++) {
+        g.setColour(Colours::black);
+        auto sliderTextBounds = parameterTextMargin.removeFromLeft(sliderSpace);
+        g.setFont(14);
+        auto text = "50";
+        auto strWidth = g.getCurrentFont().getStringWidth(text);
+        g.fillRect(sliderTextBounds);
+        g.setColour(Colours::white);
+        g.drawFittedText(text, sliderTextBounds.toNearestInt(), juce::Justification::centred, 1);
+    }
 }
 
 void GraphicEQAudioProcessorEditor::resized()
@@ -201,7 +224,6 @@ void GraphicEQAudioProcessorEditor::resized()
     
     for (CustomVerticalSlider* slider : getSliders()) {
         auto sliderBounds = bounds.removeFromLeft(sliderSpace);
-        //slider->setParameterTextBounds(sliderBounds.removeFromTop(14 * 1.5));
         slider->setBounds(sliderBounds);
     }
     
