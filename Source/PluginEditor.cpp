@@ -42,22 +42,25 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     Path backgroundTrack;
     backgroundTrack.startNewSubPath (startPoint);
     backgroundTrack.lineTo (endPoint);
-    //g.setColour (slider.findColour (Slider::backgroundColourId));
-    //g.setColour(Colour(130u, 90u, 103u));
     g.setColour(Colour(66u, 56u, 82u));
     g.strokePath (backgroundTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
     
-    // Draw notches
+    // Draw notches right and left of slider groove
     int xOffset = width / 4;
+    float notchX = slider.getLocalBounds().getCentreX() - (trackWidth / 2) - 1.75;
     float yInterval = (startPoint.y - endPoint.y) / 8;
-    Rectangle<float> marker = Rectangle<float>(startPoint.x + xOffset, startPoint.y - 0.5, 10, 1);
+    Rectangle<float> marker = Rectangle<float>(notchX + xOffset, startPoint.y - 0.5, 10, 1);
     for (int j = 0; j < 7; j++) {
         marker.setY(marker.getY() - yInterval);
-        g.setColour(Colour(230u, 195u, 132u));
+        if (j == 3) {                               // Distinguish center notch
+            g.setColour(Colour(235u, 141u, 171u));
+        } else {
+            g.setColour(Colour(179u, 152u, 102u));
+        }
         g.fillRect(marker);
-        marker.setX(startPoint.x - xOffset);
+        marker.setX(notchX - xOffset);
         g.fillRect(marker);
-        marker.setX(startPoint.x + xOffset);
+        marker.setX(notchX + xOffset);
     }
     
     Path valueTrack;
@@ -76,7 +79,7 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     g.setColour (slider.findColour (Slider::trackColourId));
     g.strokePath (valueTrack, { trackWidth, PathStrokeType::curved, PathStrokeType::rounded });
     
-    // Draw thumb
+    // Draw thumb control
     g.setColour (Colour(149u, 127u, 184u));
     Rectangle<float> thumb = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (maxPoint);
     g.fillRect(thumb);
@@ -194,20 +197,38 @@ void GraphicEQAudioProcessorEditor::paint (juce::Graphics& g)
     yMargin = bounds.getHeight() * yMarginMultiplier;
     xMargin = bounds.getWidth() * xMarginMultiplier;
 
-    bounds.removeFromLeft(xMargin);
+    auto gainTextMargin = bounds.removeFromLeft(xMargin);
     bounds.removeFromRight(xMargin);
     auto parameterTextMargin = bounds.removeFromTop(yMargin);
-    bounds.removeFromBottom(yMargin);
+    auto titleTextMargin = bounds.removeFromBottom(yMargin);
+    
+    // Draw title and credit
+    g.setFont(16);
+    g.setColour(Colour(210u, 126u, 153u));
+    juce::String titleText = "12 Band Graphic EQ - by Hakurosalix";
+    g.drawFittedText(titleText, titleTextMargin.toNearestInt(), juce::Justification::centred, 1);
+    
+    // Draw gain labels
+    gainTextMargin.removeFromTop(yMargin);
+    gainTextMargin.removeFromBottom(yMargin);
+    gainTextMargin.removeFromLeft(gainTextMargin.getWidth() / 2);
+    g.setFont(14);
+    g.setColour(Colour(210u, 126u, 153u));
+    juce::String gainTextMiddle = "0";
+    juce::String gainTextTop = "12";
+    juce::String gainTextBottom = "-12";
+    g.drawFittedText(gainTextMiddle, gainTextMargin.toNearestInt(), juce::Justification::centred, 1);
+    g.drawFittedText(gainTextTop, gainTextMargin.toNearestInt(), juce::Justification::centredTop, 1);
+    g.drawFittedText(gainTextBottom, gainTextMargin.toNearestInt(), juce::Justification::centredBottom, 1);
+    
     
     sliderSpace = bounds.getWidth() / 12;
     
+    // Draw band frequency labels
     for (int i = 0; i < allBandNames.size(); i++) {
-        //g.setColour(Colours::black);
         auto sliderTextBounds = parameterTextMargin.removeFromLeft(sliderSpace);
         g.setFont(14);
         auto text = bandLabels[i];
-        //auto strWidth = g.getCurrentFont().getStringWidth(text);
-        //g.fillRect(sliderTextBounds);
         g.setColour(Colour(230u, 195u, 132u));
         g.drawFittedText(text, sliderTextBounds.toNearestInt(), juce::Justification::centred, 1);
     }
