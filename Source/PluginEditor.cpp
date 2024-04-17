@@ -53,11 +53,7 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     Rectangle<float> marker = Rectangle<float>(notchX + xOffset, startPoint.y - 0.5, 10, 1);
     for (int j = 0; j < notchIntervalCount; j++) {
         marker.setY(marker.getY() - yInterval);
-        if (j == 3) {                               // Distinguish center notch
-            g.setColour(Colour(235u, 141u, 171u));
-        } else {
-            g.setColour(Colour(179u, 152u, 102u));
-        }
+        g.setColour(j == 3 ? Colour(235u, 141u, 171u) : Colour(179u, 152u, 102u));
         g.fillRect(marker);
         marker.setX(notchX - xOffset);
         g.fillRect(marker);
