@@ -47,10 +47,11 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     
     // Draw notches right and left of slider groove
     int xOffset = width / 4;
+    int notchIntervalCount = 7;
     float notchX = slider.getLocalBounds().getCentreX() - (trackWidth / 2) - 1.75;
     float yInterval = (startPoint.y - endPoint.y) / 8;
     Rectangle<float> marker = Rectangle<float>(notchX + xOffset, startPoint.y - 0.5, 10, 1);
-    for (int j = 0; j < 7; j++) {
+    for (int j = 0; j < notchIntervalCount; j++) {
         marker.setY(marker.getY() - yInterval);
         if (j == 3) {                               // Distinguish center notch
             g.setColour(Colour(235u, 141u, 171u));
@@ -72,7 +73,8 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     minPoint = startPoint;
     maxPoint = { kx, ky };
 
-    auto thumbWidth = getSliderThumbRadius (slider);
+    int thumbWidthIncrease = 5;
+    auto thumbWidth = getSliderThumbRadius (slider) + thumbWidthIncrease;
 
     valueTrack.startNewSubPath (minPoint);
     valueTrack.lineTo (maxPoint);
@@ -81,14 +83,14 @@ void LookAndFeel::drawLinearSlider(juce::Graphics &g,
     
     // Draw thumb control
     g.setColour (Colour(149u, 127u, 184u));
-    Rectangle<float> thumb = Rectangle<float> (static_cast<float> (thumbWidth + 5), static_cast<float> (thumbWidth + 15)).withCentre (maxPoint);
+    Rectangle<float> thumb = Rectangle<float> (static_cast<float> (thumbWidth), static_cast<float> (thumbWidth + 10)).withCentre (maxPoint);
     g.fillRect(thumb);
     
     // Thumb grip
     auto bounds = Rectangle<float>(x, y, width, height);
     Rectangle<float> r;
-    r.setLeft(thumb.getCentre().getX() - (static_cast<float> (thumbWidth + 5)) / 2);
-    r.setRight(thumb.getCentre().getX() + (static_cast<float> (thumbWidth + 5)) / 2);
+    r.setLeft(thumb.getCentre().getX() - (static_cast<float> (thumbWidth)) / 2);
+    r.setRight(thumb.getCentre().getX() + (static_cast<float> (thumbWidth)) / 2);
     r.setTop(thumb.getCentre().getY() - (static_cast<float> (thumbWidth)) / 5);
     r.setBottom(thumb.getCentre().getY() + (static_cast<float> (thumbWidth)) / 5);
     g.setColour(Colours::black);
