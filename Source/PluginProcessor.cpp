@@ -165,14 +165,21 @@ void GraphicEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     // audio processing...
     
     juce::dsp::AudioBlock<float> block(buffer);
-    auto leftBlock = block.getSingleChannelBlock(0);
-    auto rightBlock = block.getSingleChannelBlock(1);
     
-    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
-    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
-    
-    leftChain.process(leftContext);
-    rightChain.process(rightContext);
+    if (totalNumInputChannels > 1) {
+        auto leftBlock = block.getSingleChannelBlock(0);
+        auto rightBlock = block.getSingleChannelBlock(1);
+        
+        juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
+        juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
+        
+        leftChain.process(leftContext);
+        rightChain.process(rightContext);
+    } else {
+        auto monoBlock = block.getSingleChannelBlock(0);
+        juce::dsp::ProcessContextReplacing<float> monoContext(monoBlock);
+        leftChain.process(monoContext);
+    }
 }
 
 //==============================================================================

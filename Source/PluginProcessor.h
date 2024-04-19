@@ -12,13 +12,13 @@
 
 struct ChainSettings {
     std::vector<float> bandGains {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::vector<float> bandFreqs {20.f, 32.f, 64.f, 125.f, 250.f, 500.f, 1000.f, 2000.f, 4000.f, 8000.f, 16000.f, 20000.f};
-    std::vector<float> bandQualities {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+    std::vector<float> const bandFreqs {20.f, 32.f, 64.f, 125.f, 250.f, 500.f, 1000.f, 2000.f, 4000.f, 8000.f, 16000.f, 20000.f};
+    std::vector<float> const bandQualities {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 };
 
 ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
 
-static std::vector<juce::String> allBandNames {"Band 20", "Band 32", "Band 64", "Band 125",
+static std::vector<juce::String> const allBandNames {"Band 20", "Band 32", "Band 64", "Band 125",
                                     "Band 250", "Band 500", "Band 1k", "Band 2k",
                                     "Band 4k", "Band 8k", "Band 16k", "Band 20k"};
 
